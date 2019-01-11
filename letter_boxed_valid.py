@@ -46,8 +46,14 @@ def posLet(c, data):
 
 def alwaysSideChanging(word, data):
     """Test if every consecutive character in word comes from a different side (group in list data) of the square"""
-    sides = list(map(lambda c: posLet(c, data), word))
+    sides = [posLet(c, data) for c in word]
     return len(sides) == len(list(groupby(sides)))
+
+def validWords(puzset, puzData, dictlines):
+    words = [line.strip().lower() for line in dictlines]
+
+    return [word for word in words
+            if set(word).issubset(puzset) and alwaysSideChanging(word, puzData) ]
 
 #############################    main    ##################################
 if __name__ == '__main__':
@@ -67,12 +73,8 @@ if __name__ == '__main__':
     puzset = set(args.puzzle_string.lower())
     puzData = list(grouper(args.puzzle_string.lower(),3))
 
-    words = [line.strip().lower() for line in args.dict]
-
-    words = [word for word in words
-             if set(word).issubset(puzset) and alwaysSideChanging(word, puzData) ]
-
+    words = validWords(puzset, puzData, args.dict)
     words.sort(key=len)
-    
+
     for word in words:
         print(word)
