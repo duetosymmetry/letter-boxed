@@ -49,7 +49,7 @@ if __name__ == '__main__':
                         help='Dictionary file (default: %(default)s)')
 
     parser.add_argument('--max', type=int,
-                        default=4,
+                        default=2,
                         help='Maximum length of word chains to find (default: %(default)s)')
 
     parser.add_argument('puzzle_string',
