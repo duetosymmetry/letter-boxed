@@ -48,6 +48,10 @@ if __name__ == '__main__':
                         default='/usr/share/dict/words',
                         help='Dictionary file (default: %(default)s)')
 
+    parser.add_argument('--max', type=int,
+                        default=4,
+                        help='Maximum length of word chains to find (default: %(default)s)')
+
     parser.add_argument('puzzle_string',
                         help="""List of letters going around the box.  Will be split into groups of three letters per side.  Example: 'loigntshcpau' => [('l', 'o', 'i'), ('g', 'n', 't'), ('s', 'h', 'c'), ('p', 'a', 'u')]""")
 
@@ -58,22 +62,20 @@ if __name__ == '__main__':
 
     valid = validWords(puzset, puzData, args.dict)
 
-    maxChainLen = 4
+    maxChainLen = args.max
     validChains = [[word] for word in valid]
 
-    for i in range(2,maxChainLen):
+    for i in range(1,maxChainLen + 1):
 
         oldValidChains = validChains
         validChains = []
 
         for chain in oldValidChains:
 
-            chSetLen = len(list(chainSet(chain)))
-
             if coversSet(chain, puzset):
                 print('-'.join(chain).upper())
 
-            if i == (maxChainLen-1): # this is wasteful on the last step
+            if i == maxChainLen: # this is wasteful on the last step
                 continue
 
             lastLet = chain[-1][-1]
@@ -84,6 +86,7 @@ if __name__ == '__main__':
             # Question: should we restrict newChains so that it only
             # contains words that cover more letters (have a longer
             # chain set length)?
+            # chSetLen = len(list(chainSet(chain)))
 
             validChains.extend(newChains)
 
